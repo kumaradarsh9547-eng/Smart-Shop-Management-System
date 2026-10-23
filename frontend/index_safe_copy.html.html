@@ -1,0 +1,1140 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Smart Shop | Management Console</title>
+    <style>
+        :root {
+            --navy: #101b33;
+            --blue: #4f67f5;
+            --cyan: #26c6da;
+            --bg: #f5f7fc;
+            --ink: #1b2540;
+            --muted: #7d879e;
+            --line: #e8ecf5;
+            --white: #fff;
+            --green: #19a979;
+            --red: #e85c72;
+            --amber: #f0a43a
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial;
+            color: var(--ink)
+        }
+
+        button,
+        input,
+        select {
+            font: inherit
+        }
+
+        button {
+            cursor: pointer;
+            border: 0
+        }
+
+        .app {
+            display: grid;
+            grid-template-columns: 245px minmax(0, 1fr);
+            min-height: 100vh
+        }
+
+        .sidebar {
+            background: var(--navy);
+            color: #dce4ff;
+            padding: 26px 17px;
+            display: flex;
+            flex-direction: column;
+            gap: 27px
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 0 8px
+        }
+
+        .brand-icon {
+            height: 43px;
+            width: 43px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #6578ff, #21c7d9);
+            display: grid;
+            place-items: center;
+            font-size: 22px;
+            color: white;
+            box-shadow: 0 8px 25px #4f67f544
+        }
+
+        .brand strong {
+            font-size: 15px;
+            display: block;
+            color: #fff;
+            letter-spacing: .2px
+        }
+
+        .brand small {
+            font-size: 11px;
+            color: #9eadd0
+        }
+
+        .nav-label {
+            font-size: 10px;
+            letter-spacing: 1.8px;
+            color: #7788ad;
+            font-weight: 800;
+            padding: 0 13px;
+            margin-bottom: -14px
+        }
+
+        .nav {
+            display: grid;
+            gap: 6px
+        }
+
+        .nav button {
+            background: transparent;
+            color: #aebbd8;
+            padding: 12px 13px;
+            text-align: left;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px
+        }
+
+        .nav button.active,
+        .nav button:hover {
+            background: #253456;
+            color: white
+        }
+
+        .nav .ico {
+            width: 20px;
+            text-align: center;
+            font-size: 17px
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            background: #1a2949;
+            border: 1px solid #2b3b5c;
+            border-radius: 14px;
+            padding: 15px
+        }
+
+        .sidebar-bottom b {
+            font-size: 12px;
+            color: #fff
+        }
+
+        .sidebar-bottom p {
+            font-size: 11px;
+            line-height: 1.6;
+            color: #9eadd0;
+            margin: 7px 0 0
+        }
+
+        .main {
+            min-width: 0
+        }
+
+        .topbar {
+            height: 82px;
+            background: #fff;
+            border-bottom: 1px solid var(--line);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 clamp(18px, 3vw, 40px);
+            gap: 18px
+        }
+
+        .crumb {
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .crumb b {
+            color: var(--ink)
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .search {
+            border: 1px solid var(--line);
+            background: #fafbff;
+            border-radius: 11px;
+            padding: 10px 13px;
+            min-width: 220px;
+            outline: none
+        }
+
+        .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            background: #e9edff;
+            color: #4f60d9;
+            display: grid;
+            place-items: center;
+            font-weight: 800;
+            font-size: 12px
+        }
+
+        .content {
+            max-width: 1450px;
+            margin: auto;
+            padding: 29px clamp(18px, 3vw, 40px) 40px
+        }
+
+        .welcome {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 24px
+        }
+
+        .eyebrow {
+            font-size: 11px;
+            color: var(--blue);
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase
+        }
+
+        .welcome h1 {
+            margin: 7px 0 6px;
+            font-size: clamp(24px, 3vw, 31px);
+            letter-spacing: -.8px
+        }
+
+        .welcome p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 13px
+        }
+
+        .btn {
+            padding: 11px 15px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        .primary {
+            background: var(--blue);
+            color: #fff;
+            box-shadow: 0 7px 18px #4f67f52c
+        }
+
+        .soft {
+            background: #eef1ff;
+            color: #4d5de0
+        }
+
+        .outline {
+            background: white;
+            color: #59647d;
+            border: 1px solid var(--line)
+        }
+
+        .danger {
+            background: #fff0f2;
+            color: #ce3c56
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 15px
+        }
+
+        .metric {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 17px;
+            padding: 19px;
+            box-shadow: 0 5px 18px #172b5205;
+            min-width: 0
+        }
+
+        .metric-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 650
+        }
+
+        .metric-icon {
+            width: 39px;
+            height: 39px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            font-size: 18px
+        }
+
+        .purple {
+            background: #efedff
+        }
+
+        .mint {
+            background: #e4faf2
+        }
+
+        .bluebg {
+            background: #e8f5ff
+        }
+
+        .orange {
+            background: #fff2df
+        }
+
+        .metric h2 {
+            font-size: 27px;
+            margin: 13px 0 7px;
+            letter-spacing: -.6px
+        }
+
+        .metric-foot {
+            font-size: 11px;
+            color: var(--muted)
+        }
+
+        .metric-foot span {
+            color: var(--green);
+            font-weight: 800
+        }
+
+        .dash-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.55fr) minmax(260px, .8fr);
+            gap: 16px;
+            margin-top: 17px
+        }
+
+        .panel {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 17px;
+            padding: 20px;
+            min-width: 0
+        }
+
+        .panel-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 17px
+        }
+
+        .panel-head h2 {
+            font-size: 15px;
+            margin: 0
+        }
+
+        .panel-head p {
+            font-size: 11px;
+            color: var(--muted);
+            margin: 5px 0 0
+        }
+
+        .chart-area {
+            height: 190px;
+            display: flex;
+            align-items: flex-end;
+            gap: clamp(8px, 2vw, 22px);
+            padding: 13px 6px 0;
+            border-bottom: 1px solid var(--line);
+            background: repeating-linear-gradient(to bottom, transparent 0, transparent 46px, #f0f2f8 47px, #f0f2f8 48px)
+        }
+
+        .bar-wrap {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            height: 100%;
+            gap: 8px
+        }
+
+        .bar {
+            width: min(34px, 80%);
+            border-radius: 7px 7px 2px 2px;
+            background: linear-gradient(180deg, #7a8bff, #4f67f5);
+            min-height: 8px;
+            position: relative
+        }
+
+        .bar.alt {
+            background: linear-gradient(180deg, #4bd6d1, #21b5c1)
+        }
+
+        .bar-label {
+            font-size: 10px;
+            color: var(--muted);
+            padding-bottom: 8px
+        }
+
+        .legend {
+            display: flex;
+            gap: 16px;
+            margin-top: 13px;
+            font-size: 10px;
+            color: var(--muted)
+        }
+
+        .dot {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            margin-right: 6px;
+            background: var(--blue)
+        }
+
+        .dot.cyan {
+            background: var(--cyan)
+        }
+
+        .category-list {
+            display: grid;
+            gap: 17px
+        }
+
+        .cat-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 8px;
+            font-size: 12px
+        }
+
+        .cat-row .name {
+            font-weight: 700
+        }
+
+        .cat-row .count {
+            color: var(--muted)
+        }
+
+        .track {
+            grid-column: 1/3;
+            height: 6px;
+            background: #f0f2f8;
+            border-radius: 10px;
+            overflow: hidden
+        }
+
+        .fill {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #6175ff, #22c8d4)
+        }
+
+        .section-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin: 27px 0 14px;
+            flex-wrap: wrap
+        }
+
+        .section-row h2 {
+            margin: 0;
+            font-size: 17px
+        }
+
+        .section-row p {
+            margin: 5px 0 0;
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap
+        }
+
+        .filter-row input,
+        .filter-row select,
+        .field input,
+        .field select {
+            padding: 10px 12px;
+            border: 1px solid #e0e5f0;
+            border-radius: 9px;
+            background: #fff;
+            outline: none;
+            min-width: 0
+        }
+
+        .table-panel {
+            padding: 0;
+            overflow: hidden
+        }
+
+        .table-title {
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--line);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px
+        }
+
+        .table-title h2 {
+            font-size: 14px;
+            margin: 0
+        }
+
+        .table-title span {
+            font-size: 11px;
+            color: var(--muted)
+        }
+
+        .table-wrap {
+            overflow: auto
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            white-space: nowrap
+        }
+
+        th {
+            background: #fafbfe;
+            color: #8993a8;
+            font-size: 10px;
+            letter-spacing: .6px;
+            text-transform: uppercase;
+            text-align: left;
+            padding: 13px 18px
+        }
+
+        td {
+            padding: 14px 18px;
+            border-top: 1px solid #f0f2f7;
+            font-size: 12px
+        }
+
+        td b {
+            font-weight: 750
+        }
+
+        .product-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .product-emoji {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: #f1f3ff;
+            display: grid;
+            place-items: center;
+            font-size: 16px
+        }
+
+        .subtext {
+            font-size: 10px;
+            color: var(--muted);
+            margin-top: 4px
+        }
+
+        .status {
+            font-size: 10px;
+            font-weight: 800;
+            border-radius: 30px;
+            padding: 6px 9px;
+            background: #e5f9f1;
+            color: #14835d
+        }
+
+        .status.low {
+            background: #fff0e4;
+            color: #bf6c19
+        }
+
+        .status.out {
+            background: #fff0f2;
+            color: #d1435b
+        }
+
+        .mini-action {
+            background: #f0f2ff;
+            color: #4e5edc;
+            border-radius: 8px;
+            padding: 7px 10px;
+            font-size: 10px;
+            font-weight: 800
+        }
+
+        .bottom-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 16px
+        }
+
+        .empty {
+            padding: 30px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px
+        }
+
+        .toast {
+            position: fixed;
+            right: 22px;
+            bottom: 22px;
+            background: #14213c;
+            color: #fff;
+            border-radius: 12px;
+            padding: 13px 17px;
+            font-size: 12px;
+            box-shadow: 0 10px 35px #14213c30;
+            display: none;
+            z-index: 10;
+            max-width: calc(100vw - 44px)
+        }
+
+        .toast.show {
+            display: block
+        }
+
+        .modal-back {
+            position: fixed;
+            inset: 0;
+            background: #101b3377;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            z-index: 5
+        }
+
+        .modal-back.show {
+            display: flex
+        }
+
+        .modal {
+            background: #fff;
+            width: min(520px, 100%);
+            border-radius: 18px;
+            padding: 23px;
+            box-shadow: 0 20px 60px #101b3340
+        }
+
+        .modal h2 {
+            margin: 0 0 6px;
+            font-size: 19px
+        }
+
+        .modal>p {
+            margin: 0 0 20px;
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px 12px
+        }
+
+        .field label {
+            font-size: 11px;
+            font-weight: 800;
+            color: #68748b;
+            display: block;
+            margin: 10px 0 5px
+        }
+
+        .field input,
+        .field select {
+            width: 100%
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 9px;
+            margin-top: 20px
+        }
+
+        .hidden {
+            display: none !important
+        }
+
+        .footer {
+            font-size: 10px;
+            color: #9aa3b5;
+            text-align: center;
+            padding: 26px 0 0
+        }
+
+        @media(max-width:1050px) {
+            .app {
+                grid-template-columns: 78px minmax(0, 1fr)
+            }
+
+            .sidebar {
+                padding: 23px 10px
+            }
+
+            .brand {
+                justify-content: center;
+                padding: 0
+            }
+
+            .brand>div:last-child,
+            .nav-label,
+            .nav button .nav-text,
+            .sidebar-bottom {
+                display: none
+            }
+
+            .nav button {
+                justify-content: center;
+                padding: 13px 5px
+            }
+
+            .dash-grid {
+                grid-template-columns: 1fr
+            }
+
+            .cards {
+                grid-template-columns: repeat(2, minmax(0, 1fr))
+            }
+        }
+
+        @media(max-width:620px) {
+            .app {
+                grid-template-columns: 1fr
+            }
+
+            .sidebar {
+                display: none
+            }
+
+            .topbar {
+                height: 65px;
+                padding: 0 16px
+            }
+
+            .search {
+                min-width: 0;
+                width: 42vw
+            }
+
+            .content {
+                padding: 22px 13px
+            }
+
+            .cards {
+                gap: 9px
+            }
+
+            .metric {
+                padding: 14px
+            }
+
+            .metric h2 {
+                font-size: 22px
+            }
+
+            .metric-top {
+                font-size: 10px
+            }
+
+            .metric-icon {
+                width: 32px;
+                height: 32px
+            }
+
+            .bottom-grid {
+                grid-template-columns: 1fr
+            }
+
+            .panel {
+                padding: 15px
+            }
+
+            .table-title {
+                padding: 15px
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr
+            }
+
+            .welcome h1 {
+                font-size: 24px
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app">
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">✦</div>
+                <div><strong>Krishna Gift House</strong><small>ShopManagement System</small></div>
+            </div>
+            <div class="nav-label">WORKSPACE</div>
+            <nav class="nav"><button class="active" data-view="dashboard"><span class="ico">▦</span><span
+                        class="nav-text">Dashboard</span></button><button data-view="inventory"><span
+                        class="ico">▤</span><span class="nav-text">Inventory</span></button><button
+                    data-view="sales"><span class="ico">↗</span><span class="nav-text">Sales &
+                        Orders</span></button><button data-view="reports"><span class="ico">◷</span><span
+                        class="nav-text">Reports</span></button></nav>
+            <div class="nav-label">PREFERENCES</div>
+            <nav class="nav"><button data-view="settings"><span class="ico">⚙</span><span class="nav-text">Store
+                        settings</span></button></nav>
+            <div class="sidebar-bottom"><b>✦ Retail made simple</b>
+                <p>Keep your products, stock and sales organised in one place.</p>
+            </div>
+        </aside>
+        <div class="main">
+            <header class="topbar">
+                <div class="crumb">Workspace&nbsp; / &nbsp;<b id="crumb">Dashboard overview</b></div>
+                <div class="top-actions"><input id="globalSearch" class="search" placeholder="⌕  Search products..."
+                        aria-label="Search products">
+                    <div class="avatar">SS</div>
+                </div>
+            </header>
+            <main class="content">
+                <div class="welcome">
+                    <div>
+                        <div class="eyebrow">YOUR BUSINESS AT A GLANCE</div>
+                        <h1 id="pageTitle">Good evening, Store Owner ✨</h1>
+                        <p id="pageSub">Here’s what’s happening with your shop today.</p>
+                    </div>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn outline" id="refreshBtn">↻
+                            Refresh</button><button class="btn primary" id="addTopBtn">＋ Add product</button></div>
+                </div>
+                <section id="dashboardView">
+                    <div class="cards">
+                        <div class="metric">
+                            <div class="metric-top">Total products <span class="metric-icon purple">▤</span></div>
+                            <h2 id="mProducts">—</h2>
+                            <div class="metric-foot">Unique products in catalogue</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-top">Units in stock <span class="metric-icon mint">▦</span></div>
+                            <h2 id="mStock">—</h2>
+                            <div class="metric-foot">Across all product categories</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-top">Sales revenue <span class="metric-icon bluebg">₹</span></div>
+                            <h2 id="mRevenue">₹0</h2>
+                            <div class="metric-foot"><span id="mSalesCount">0 sales</span> recorded in this demo</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-top">Low stock alerts <span class="metric-icon orange">⚠</span></div>
+                            <h2 id="mLow">—</h2>
+                            <div class="metric-foot">Products with 5 units or fewer</div>
+                        </div>
+                    </div>
+                    <div class="dash-grid">
+                        <section class="panel">
+                            <div class="panel-head">
+                                <div>
+                                    <h2>Sales overview</h2>
+                                    <p>Illustrative activity from your saved demo sales</p>
+                                </div><button class="btn soft" id="goSales">View sales ↗</button>
+                            </div>
+                            <div id="chart" class="chart-area"></div>
+                            <div class="legend"><span><i class="dot"></i>Revenue activity (illustrative)</span><span><i
+                                        class="dot cyan"></i>Sales trend</span></div>
+                        </section>
+                        <section class="panel">
+                            <div class="panel-head">
+                                <div>
+                                    <h2>Inventory by category</h2>
+                                    <p>Product mix in your store</p>
+                                </div><span style="font-size:20px">◉</span>
+                            </div>
+                            <div class="category-list" id="categoryList"></div>
+                        </section>
+                    </div>
+                    <div class="section-row">
+                        <div>
+                            <h2>Inventory overview</h2>
+                            <p>Quick look at products and stock status.</p>
+                        </div><button class="btn soft" id="viewInventory">View all products →</button>
+                    </div>
+                    <section class="panel table-panel">
+                        <div class="table-title">
+                            <h2>Product catalogue</h2><span id="productCount">0 products</span>
+                        </div>
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Category</th>
+                                        <th>Selling price</th>
+                                        <th>In stock</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inventoryBody"></tbody>
+                            </table>
+                            <div id="inventoryEmpty" class="empty hidden">No products found. Load demo data or add your
+                                first product.</div>
+                        </div>
+                    </section>
+                    <div class="bottom-grid">
+                        <section class="panel">
+                            <div class="panel-head">
+                                <div>
+                                    <h2>Stock watch</h2>
+                                    <p>Items that may need restocking</p>
+                                </div><span style="font-size:20px">⚠</span>
+                            </div>
+                            <div id="stockWatch" class="category-list"></div>
+                        </section>
+                        <section class="panel">
+                            <div class="panel-head">
+                                <div>
+                                    <h2>Recent sales</h2>
+                                    <p>Latest transactions</p>
+                                </div><button class="btn soft" id="recentSalesBtn">See all</button>
+                            </div>
+                            <div id="recentSales" class="category-list"></div>
+                        </section>
+                    </div>
+                </section>
+                <section id="inventoryView" class="hidden">
+                    <div class="section-row">
+                        <div>
+                            <h2>Inventory management</h2>
+                            <p>Add products, track stock and remove unused catalogue items.</p>
+                        </div>
+                        <div class="filter-row"><input id="inventorySearch" placeholder="Search product"><select
+                                id="categoryFilter">
+                                <option>All categories</option>
+                                <option>Electronics</option>
+                                <option>Home Appliances</option>
+                                <option>Kitchen</option>
+                                <option>Accessories</option>
+                                <option>Home & Living</option>
+                                <option>Other</option>
+                            </select></div>
+                    </div>
+                    <section class="panel table-panel">
+                        <div class="table-title">
+                            <h2>All products</h2><span id="allProductCount">0 products</span>
+                        </div>
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Category</th>
+                                        <th>Selling price</th>
+                                        <th>Cost price</th>
+                                        <th>Stock</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="allInventoryBody"></tbody>
+                            </table>
+                            <div id="allInventoryEmpty" class="empty hidden">No products match your search.</div>
+                        </div>
+                    </section>
+                </section>
+                <section id="salesView" class="hidden">
+                    <div class="section-row">
+                        <div>
+                            <h2>Sales & orders</h2>
+                            <p>Record a sale and stock will be reduced automatically.</p>
+                        </div><button class="btn primary" id="recordSaleBtn">＋ Record sale</button>
+                    </div>
+                    <section class="panel table-panel">
+                        <div class="table-title">
+                            <h2>Transaction history</h2><span id="saleCount">0 transactions</span>
+                        </div>
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Sale ID</th>
+                                        <th>Product</th>
+                                        <th>Qty</th>
+                                        <th>Payment</th>
+                                        <th>Amount</th>
+                                        <th>Date & time</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="salesBody"></tbody>
+                            </table>
+                            <div id="salesEmpty" class="empty hidden">No sales yet. Record a sale to see it here.</div>
+                        </div>
+                    </section>
+                </section>
+                <section id="reportsView" class="hidden">
+                    <div class="section-row">
+                        <div>
+                            <h2>Business reports</h2>
+                            <p>A quick summary based on saved products and sales.</p>
+                        </div><button class="btn outline" id="exportBtn">↓ Export products CSV</button>
+                    </div>
+                    <div class="cards">
+                        <div class="metric">
+                            <div class="metric-top">Stock cost value <span class="metric-icon purple">₹</span></div>
+                            <h2 id="rStockValue">₹0</h2>
+                            <div class="metric-foot">Cost price × current quantity</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-top">Estimated gross profit <span class="metric-icon mint">↗</span></div>
+                            <h2 id="rProfit">₹0</h2>
+                            <div class="metric-foot">Based on recorded sales and cost prices</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-top">Transactions <span class="metric-icon bluebg">▤</span></div>
+                            <h2 id="rTransactions">0</h2>
+                            <div class="metric-foot">Saved sale records</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-top">Categories <span class="metric-icon orange">◉</span></div>
+                            <h2 id="rCategories">0</h2>
+                            <div class="metric-foot">Categories currently stocked</div>
+                        </div>
+                    </div>
+                    <p class="subtext" style="margin-top:15px">Figures are calculated from this local demo database and
+                        are not accounting or tax reports.</p>
+                </section>
+                <section id="settingsView" class="hidden">
+                    <section class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <h2>Store settings & demo tools</h2>
+                                <p>Manage sample data for your academic project.</p>
+                            </div>
+                        </div>
+                        <p style="font-size:13px;line-height:1.8;color:#66718a">This project uses a Django REST API and
+                            a local SQLite database. Seed demo data to populate the dashboard with sample products and
+                            transactions. Seed only works on an empty database, so it won't overwrite your existing
+                            records.</p>
+                        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px"><button class="btn primary"
+                                id="seedBtn">✦ Load demo data</button><button class="btn outline" id="apiBtn">Open API
+                                overview ↗</button></div>
+                        <p class="subtext" style="margin-top:16px">For local learning use only. Before putting this
+                            online, add authentication, permissions, backups and production security settings.</p>
+                    </section>
+                </section>
+                <div class="footer">SMART SHOP MANAGEMENT SUITE · ACADEMIC MINI PROJECT · DJANGO REST API + SQLITE</div>
+            </main>
+        </div>
+    </div>
+    <div class="toast" id="toast"></div>
+    <div class="modal-back" id="productModal">
+        <div class="modal">
+            <h2>Add a product</h2>
+            <p>Enter the product details to update your inventory.</p>
+            <form id="productForm">
+                <div class="form-grid">
+                    <div class="field"><label for="pName">Product name</label><input id="pName" required maxlength="120"
+                            placeholder="e.g. LED Bulb 9W"></div>
+                    <div class="field"><label for="pCategory">Category</label><select id="pCategory">
+                            <option>Electronics</option>
+                            <option>Home Appliances</option>
+                            <option>Kitchen</option>
+                            <option>Accessories</option>
+                            <option>Home & Living</option>
+                            <option>Other</option>
+                        </select></div>
+                    <div class="field"><label for="pPrice">Selling price (₹)</label><input id="pPrice" type="number"
+                            min="0.01" step="0.01" required placeholder="299"></div>
+                    <div class="field"><label for="pCost">Cost price (₹)</label><input id="pCost" type="number" min="0"
+                            step="0.01" required placeholder="180"></div>
+                    <div class="field"><label for="pQty">Quantity in stock</label><input id="pQty" type="number" min="0"
+                            step="1" required placeholder="10"></div>
+                </div>
+                <div class="modal-actions"><button type="button" class="btn outline"
+                        id="cancelProduct">Cancel</button><button class="btn primary" type="submit">Save
+                        product</button></div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-back" id="saleModal">
+        <div class="modal">
+            <h2>Record a sale</h2>
+            <p>Choose a product and quantity. Stock is updated automatically.</p>
+            <form id="saleForm">
+                <div class="field"><label for="sProduct">Product</label><select id="sProduct" required></select></div>
+                <div class="form-grid">
+                    <div class="field"><label for="sQty">Quantity sold</label><input id="sQty" type="number" min="1"
+                            step="1" value="1" required></div>
+                    <div class="field"><label for="sPayment">Payment method</label><select id="sPayment">
+                            <option>Cash</option>
+                            <option>UPI</option>
+                            <option>Card</option>
+                        </select></div>
+                </div>
+                <div class="modal-actions"><button type="button" class="btn outline"
+                        id="cancelSale">Cancel</button><button class="btn primary" type="submit">Save sale</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        const API = '/api/'; let products = [], sales = [], dash = {}; const $ = id => document.getElementById(id); const money = n => '₹' + Number(n || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 }); const safe = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); const emoji = c => ({ 'Electronics': '💡', 'Home Appliances': '🌀', 'Kitchen': '🍳', 'Accessories': '🔌', 'Home & Living': '🏠', 'Other': '📦' }[c] || '📦');
+        async function api(path, opts = {}) { let r = await fetch(API + path, { headers: { 'Content-Type': 'application/json', ...(opts.headers || {}) }, ...opts }); let data = null; try { data = await r.json() } catch { } if (!r.ok) throw new Error(data?.error || data?.detail || Object.values(data || {}).flat().join(' ') || `Request failed (${r.status})`); return data }
+        function toast(msg) { $('toast').textContent = msg; $('toast').classList.add('show'); setTimeout(() => $('toast').classList.remove('show'), 3200) }
+        async function refresh() { try { [products, sales, dash] = await Promise.all([api('products/'), api('sales/'), api('dashboard/')]); render(); } catch (e) { toast('Could not connect to backend. Start Django server first.'); console.error(e) } }
+        function stockStatus(q) { return q === 0 ? '<span class="status out">Out of stock</span>' : q <= 5 ? '<span class="status low">Low stock</span>' : '<span class="status">In stock</span>' }
+        function productRows(list, withCost = false) { return list.map(p => `<tr><td><div class="product-cell"><div class="product-emoji">${emoji(p.category)}</div><div><b>${safe(p.name)}</b><div class="subtext">SKU-${String(p.id).padStart(4, '0')}</div></div></div></td><td>${safe(p.category)}</td><td><b>${money(p.price)}</b></td>${withCost ? `<td>${money(p.cost_price)}</td>` : ''}<td>${p.quantity} units</td><td>${stockStatus(p.quantity)}</td><td><button class="mini-action" onclick="deleteProduct(${p.id})">Delete</button></td></tr>`).join('') }
+        function render() { $('mProducts').textContent = dash.total_products ?? products.length; $('mStock').textContent = (dash.stock_units ?? 0).toLocaleString('en-IN'); $('mRevenue').textContent = money(dash.sales_revenue); $('mLow').textContent = dash.low_stock ?? 0; $('mSalesCount').textContent = `${dash.sales_count || 0} sales`; $('productCount').textContent = `${products.length} products`; $('inventoryBody').innerHTML = productRows(products.slice(0, 6)); $('inventoryEmpty').classList.toggle('hidden', products.length > 0); $('allProductCount').textContent = `${products.length} products`; $('allInventoryBody').innerHTML = productRows(filteredProducts(), true); $('allInventoryEmpty').classList.toggle('hidden', filteredProducts().length > 0); $('salesBody').innerHTML = sales.map(s => `<tr><td><b>#S-${String(s.id).padStart(4, '0')}</b></td><td>${safe(s.product_name)}</td><td>${s.quantity}</td><td>${safe(s.payment_method)}</td><td><b>${money(s.total)}</b></td><td>${new Date(s.created_at).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}</td></tr>`).join(''); $('salesEmpty').classList.toggle('hidden', sales.length > 0); $('saleCount').textContent = `${sales.length} transactions`; $('rStockValue').textContent = money(dash.inventory_value); $('rProfit').textContent = money(dash.estimated_profit); $('rTransactions').textContent = dash.sales_count || 0; $('rCategories').textContent = new Set(products.map(p => p.category)).size; renderCategories(); renderWatch(); renderRecent(); renderChart(); $('sProduct').innerHTML = products.filter(p => p.quantity > 0).map(p => `<option value="${p.id}">${safe(p.name)} · ${money(p.price)} · ${p.quantity} available</option>`).join(''); }
+        function filteredProducts() { let q = ($('inventorySearch')?.value || '').toLowerCase(), c = $('categoryFilter')?.value || 'All categories'; return products.filter(p => (!q || p.name.toLowerCase().includes(q)) && (c === 'All categories' || p.category === c)) }
+        function renderCategories() { let cats = dash.category_breakdown || []; if (!cats.length) { $('categoryList').innerHTML = '<div class="empty">Add products to see category breakdown.</div>'; return } let max = Math.max(...cats.map(c => c.count), 1); $('categoryList').innerHTML = cats.slice(0, 6).map(c => `<div class="cat-row"><span class="name">${emoji(c.category)} &nbsp;${safe(c.category)}</span><span class="count">${c.count} products</span><div class="track"><div class="fill" style="width:${c.count / max * 100}%"></div></div></div>`).join('') }
+        function renderWatch() { let low = products.filter(p => p.quantity <= 5).sort((a, b) => a.quantity - b.quantity).slice(0, 5); $('stockWatch').innerHTML = low.length ? low.map(p => `<div class="cat-row"><span class="name">${emoji(p.category)} &nbsp;${safe(p.name)}</span><span class="count">${p.quantity} left</span><div class="track"><div class="fill" style="width:${Math.max(5, p.quantity / 5 * 100)}%;background:linear-gradient(90deg,#f6b64e,#e85c72)"></div></div></div>`).join('') : '<div class="empty">✨ All products have healthy stock levels.</div>' }
+        function renderRecent() { let recent = sales.slice(0, 4); $('recentSales').innerHTML = recent.length ? recent.map(s => `<div class="cat-row"><span class="name">${safe(s.product_name)} <span class="subtext">× ${s.quantity} · ${safe(s.payment_method)}</span></span><span class="count"><b>${money(s.total)}</b></span></div>`).join('') : '<div class="empty">No transactions yet. Record a sale to get started.</div>' }
+        function renderChart() { let recent = sales.slice(0, 7).reverse(); let vals = recent.map(s => Number(s.total)); if (!vals.length) vals = [0, 0, 0, 0, 0, 0, 0]; let max = Math.max(...vals, 1); let labels = recent.length ? recent.map((s, i) => `Sale ${i + 1}`) : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']; $('chart').innerHTML = vals.map((v, i) => `<div class="bar-wrap"><div class="bar ${i % 3 === 1 ? 'alt' : ''}" style="height:${Math.max(4, v / max * 78)}%" title="${money(v)}"></div><div class="bar-label">${labels[i]}</div></div>`).join('') }
+        async function addProduct(e) { e.preventDefault(); let payload = { name: $('pName').value.trim(), category: $('pCategory').value, price: $('pPrice').value, cost_price: $('pCost').value, quantity: $('pQty').value }; try { await api('products/', { method: 'POST', body: JSON.stringify(payload) }); $('productModal').classList.remove('show'); $('productForm').reset(); await refresh(); toast('Product saved to database.') } catch (err) { toast(err.message) } }
+        async function deleteProduct(id) { if (!confirm('Delete this product from inventory?')) return; try { await api(`products/${id}/`, { method: 'DELETE' }); await refresh(); toast('Product deleted.') } catch (e) { toast(e.message) } }
+        async function recordSale(e) { e.preventDefault(); try { await api('sales/', { method: 'POST', body: JSON.stringify({ product: $('sProduct').value, quantity: $('sQty').value, payment_method: $('sPayment').value }) }); $('saleModal').classList.remove('show'); $('saleForm').reset(); await refresh(); toast('Sale saved and stock updated.') } catch (err) { toast(err.message) } }
+        function showView(view) { ['dashboard', 'inventory', 'sales', 'reports', 'settings'].forEach(v => $(v + 'View').classList.toggle('hidden', v !== view)); document.querySelectorAll('[data-view]').forEach(b => b.classList.toggle('active', b.dataset.view === view)); let names = { dashboard: ['Dashboard overview', 'Good evening, Store Owner ✨', 'Here’s what’s happening with your shop today.'], inventory: ['Inventory management', 'Your product catalogue 📦', 'Manage stock and keep product information up to date.'], sales: ['Sales & orders', 'Sales that keep you moving ↗', 'Review transactions and record new customer sales.'], reports: ['Business reports', 'Know your numbers 📊', 'A quick business snapshot from your saved records.'], settings: ['Store settings', 'Make this workspace yours ⚙', 'Demo tools and project information.'] }; $('crumb').textContent = names[view][0]; $('pageTitle').textContent = names[view][1]; $('pageSub').textContent = names[view][2]; $('addTopBtn').classList.toggle('hidden', view === 'sales' || view === 'settings'); }
+        function openModal(id) { $(id).classList.add('show') }
+        async function seed() { try { let d = await api('demo-data/', { method: 'POST', body: '{}' }); await refresh(); toast(d.message || 'Demo data loaded.') } catch (e) { toast(e.message) } }
+        function exportCSV() { let rows = [['ID', 'Product', 'Category', 'Selling price', 'Cost price', 'Quantity'], ...products.map(p => [p.id, p.name, p.category, p.price, p.cost_price, p.quantity])]; let csv = rows.map(r => r.map(v => '"' + String(v ?? '').replace(/"/g, '""') + '"').join(',')).join('\n'); let a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' })); a.download = 'smart-shop-inventory.csv'; a.click(); URL.revokeObjectURL(a.href) }
+        document.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', () => showView(b.dataset.view))); $('addTopBtn').onclick = () => openModal('productModal'); $('cancelProduct').onclick = () => $('productModal').classList.remove('show'); $('cancelSale').onclick = () => $('saleModal').classList.remove('show'); $('productForm').addEventListener('submit', addProduct); $('saleForm').addEventListener('submit', recordSale); $('recordSaleBtn').onclick = () => openModal('saleModal'); $('goSales').onclick = $('recentSalesBtn').onclick = () => showView('sales'); $('viewInventory').onclick = () => showView('inventory'); $('refreshBtn').onclick = refresh; $('seedBtn').onclick = seed; $('apiBtn').onclick = () => window.open('/api/dashboard/', '_blank'); $('exportBtn').onclick = exportCSV; $('inventorySearch').addEventListener('input', () => { $('allInventoryBody').innerHTML = productRows(filteredProducts(), true); $('allInventoryEmpty').classList.toggle('hidden', filteredProducts().length > 0) }); $('categoryFilter').addEventListener('change', () => { $('allInventoryBody').innerHTML = productRows(filteredProducts(), true); $('allInventoryEmpty').classList.toggle('hidden', filteredProducts().length > 0) }); $('globalSearch').addEventListener('input', () => { showView('inventory'); $('inventorySearch').value = $('globalSearch').value; $('allInventoryBody').innerHTML = productRows(filteredProducts(), true); $('allInventoryEmpty').classList.toggle('hidden', filteredProducts().length > 0) }); $('productModal').addEventListener('click', e => { if (e.target === $('productModal')) $('productModal').classList.remove('show') }); $('saleModal').addEventListener('click', e => { if (e.target === $('saleModal')) $('saleModal').classList.remove('show') }); refresh();
+    </script>
+</body>
+
+</html>
